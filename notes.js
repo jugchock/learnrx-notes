@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
     const textbox = document.querySelector('#textbox');
     const output = document.querySelector('#output');
 
-    const keypresses = Observable.fromEvent(textbox, 'keypress');
+    const keypresses = Observable.fromEvent(textbox, 'keyup');
 
     function getWikipediaSearchResults(term) {
         return Observable.create(observer => {
@@ -22,6 +22,10 @@ window.addEventListener('load', () => {
         });
     }
 
-    getWikipediaSearchResults('Terminator')
-        .forEach(result => output.innerHTML = result);
+    const searchResultSets = keypresses
+        .throttleTime(500)
+        .switchMap(key => getWikipediaSearchResults(textbox.value));
+
+    searchResultSets
+        .forEach(result => output.innerHTML = JSON.stringify(result));
 });
