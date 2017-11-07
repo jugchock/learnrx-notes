@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
             `json&search=${encodeURIComponent(term)}&callback=?`;
 
         $.getJSON(url, data => {
-            console.log(data);
+            console.log(data[1]);
         });
     }
 
