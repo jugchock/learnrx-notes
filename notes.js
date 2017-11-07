@@ -29,5 +29,6 @@ window.addEventListener('load', () => {
         .switchMap(search => getWikipediaSearchResults(search).retry(3));
 
     searchResultSets
-        .forEach(result => output.innerHTML = JSON.stringify(result));
+        .forEach(result => output.innerHTML = JSON.stringify(result))
+        .catch(err => console.error(err));
 });
