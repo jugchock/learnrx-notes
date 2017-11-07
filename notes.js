@@ -21,5 +21,6 @@ window.addEventListener('load', () => {
         });
     }
 
-    getWikipediaSearchResults('Terminator');
+    getWikipediaSearchResults('Terminator')
+        .forEach(result => console.log(result));
 });
