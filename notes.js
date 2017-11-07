@@ -8,7 +8,6 @@ window.addEventListener('load', () => {
 
     const keypresses = Observable.fromEvent(textbox, 'keyup');
     const searchButtonClicks = Observable.fromEvent(searchButton, 'click');
-    const closeButtonClicks = Observable.fromEvent(closeButton, 'click');
 
     function getWikipediaSearchResults(term) {
         return Observable.create(observer => {
@@ -27,22 +26,19 @@ window.addEventListener('load', () => {
         });
     }
 
-    searchButtonClicks.forEach(() => {
-        searchForm.style.display = 'block';
-    });
+    const searchFormOpens = searchButtonClicks.do(() => searchForm.style.display = 'block');
 
-    closeButtonClicks.forEach(() => {
-        searchForm.style.display = 'none';
-    });
-
-    const searchResultSets = searchButtonClicks.switchMap(() =>
-        keypresses
+    const searchResultSets = searchFormOpens.switchMap(() => {
+        const closeButtonClicks = Observable.fromEvent(closeButton, 'click');
+        const searchFormCloses = closeButtonClicks.do(() => searchForm.style.display = 'none');
+        return keypresses
             .debounceTime(500)
             .map(key => textbox.value)
             .distinctUntilChanged()
             .filter(search => search.length > 0)
             .switchMap(search => getWikipediaSearchResults(search).retry(3))
-    );
+            .takeUntil(searchFormCloses);
+    });
 
     searchResultSets
         .forEach(result => output.innerHTML = JSON.stringify(result))
