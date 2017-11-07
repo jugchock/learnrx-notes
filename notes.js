@@ -7,24 +7,20 @@ window.addEventListener('load', () => {
     keypresses.forEach(x => console.log(x.keyCode));
 
     function getWikipediaSearchResults(term) {
-        return {
-            forEach: observer => {
-                const url = `http://en.wikipedia.org/w/api.php?action=opensearch&format=` +
-                    `json&search=${encodeURIComponent(term)}&callback=?`;
-                let cancelled = false;
+        return Observable.create(observer => {
+            const url = `http://en.wikipedia.org/w/api.php?action=opensearch&format=` +
+                `json&search=${encodeURIComponent(term)}&callback=?`;
+            let cancelled = false;
 
-                $.getJSON(url, data => {
-                    if (!cancelled) {
-                        observer.next(data[1]);
-                        observer.complete();
-                    }
-                });
+            $.getJSON(url, data => {
+                if (!cancelled) {
+                    observer.next(data[1]);
+                    observer.complete();
+                }
+            });
 
-                return {
-                    dispose: () => cancelled = true
-                };
-            }
-        };
+            return () => cancelled = true;
+        });
     }
 
     function searchWikipedia(term) {
