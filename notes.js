@@ -24,7 +24,9 @@ window.addEventListener('load', () => {
 
     const searchResultSets = keypresses
         .throttleTime(500)
-        .switchMap(key => getWikipediaSearchResults(textbox.value));
+        .map(key => textbox.value)
+        .distinctUntilChanged()
+        .switchMap(search => getWikipediaSearchResults(search));
 
     searchResultSets
         .forEach(result => output.innerHTML = JSON.stringify(result));
