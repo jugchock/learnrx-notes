@@ -1,6 +1,7 @@
 window.addEventListener('load', () => {
     const Observable = Rx.Observable;
     const textbox = document.querySelector('#textbox');
+    const output = document.querySelector('#output');
 
     const keypresses = Observable.fromEvent(textbox, 'keypress');
 
@@ -22,5 +23,5 @@ window.addEventListener('load', () => {
     }
 
     getWikipediaSearchResults('Terminator')
-        .forEach(result => console.log(result));
+        .forEach(result => output.innerHTML = result);
 });
