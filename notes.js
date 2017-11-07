@@ -11,14 +11,17 @@ window.addEventListener('load', () => {
             forEach: observer => {
                 const url = `http://en.wikipedia.org/w/api.php?action=opensearch&format=` +
                     `json&search=${encodeURIComponent(term)}&callback=?`;
+                let cancelled = false;
 
                 $.getJSON(url, data => {
-                    observer.next(data[1]);
-                    observer.complete();
+                    if (!cancelled) {
+                        observer.next(data[1]);
+                        observer.complete();
+                    }
                 });
 
                 return {
-                    dispose: () => { }
+                    dispose: () => cancelled = true
                 };
             }
         };
