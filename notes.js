@@ -26,6 +26,7 @@ window.addEventListener('load', () => {
         .throttleTime(500)
         .map(key => textbox.value)
         .distinctUntilChanged()
+        .filter(search => search.length > 0)
         .switchMap(search => getWikipediaSearchResults(search).retry(3));
 
     searchResultSets
