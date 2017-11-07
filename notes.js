@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
         .throttleTime(500)
         .map(key => textbox.value)
         .distinctUntilChanged()
-        .switchMap(search => getWikipediaSearchResults(search));
+        .switchMap(search => getWikipediaSearchResults(search).retry(3));
 
     searchResultSets
         .forEach(result => output.innerHTML = JSON.stringify(result));
