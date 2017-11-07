@@ -4,8 +4,6 @@ window.addEventListener('load', () => {
 
     const keypresses = Observable.fromEvent(textbox, 'keypress');
 
-    keypresses.forEach(x => console.log(x.keyCode));
-
     function getWikipediaSearchResults(term) {
         return Observable.create(observer => {
             const url = `http://en.wikipedia.org/w/api.php?action=opensearch&format=` +
@@ -23,14 +21,5 @@ window.addEventListener('load', () => {
         });
     }
 
-    function searchWikipedia(term) {
-        const url = `http://en.wikipedia.org/w/api.php?action=opensearch&format=` +
-            `json&search=${encodeURIComponent(term)}&callback=?`;
-
-        $.getJSON(url, data => {
-            console.log(data[1]);
-        });
-    }
-
-    searchWikipedia('Terminator');
+    getWikipediaSearchResults('Terminator');
 });
